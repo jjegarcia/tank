@@ -6,10 +6,12 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class TankTest {
+    private val inletValve: InletValve = mockk<InletValve>(relaxed = true)
+    private val outLetValve = mockk<OutletValve>(relaxed = true)
+
     @Test
     fun `given Tank Is Filling When High Level Reached Then Tank Is Full`(){
-        val inletValve= mockk<InletValve>(relaxed = true)
-        val tank = Tank(state=TankState.FILLING, inletValve = inletValve)
+        val tank = Tank(state=TankState.FILLING, inletValve = inletValve, outletValve =outLetValve)
 
         tank.highLevel()
 
@@ -17,9 +19,8 @@ class TankTest {
     }
 
     @Test
-    fun `given Tank Is Filling When HighLevel Reached Then CloseInlet`(){
-        val inletValve= mockk<InletValve>(relaxed = true)
-        val tank = Tank(inletValve=inletValve,state=TankState.FILLING)
+    fun `given Tank Is Filling When HighLevel Reached Then Close Inlet`(){
+        val tank = Tank(state=TankState.FILLING, inletValve= inletValve, outletValve =outLetValve)
 
         tank.highLevel()
 
@@ -30,11 +31,22 @@ class TankTest {
 
     @Test
     fun `given tank is full when flush then Flushing`(){
-        val dummyState = mockk<InletValve>(relaxed = true)
-        val tank = Tank(state = TankState.FULL,inletValve = dummyState)
+        val tank = Tank(state = TankState.FULL, inletValve = inletValve, outletValve =outLetValve)
 
         tank.flush()
 
         assertEquals(TankState.FLUSHING,tank.state)
+    }
+
+    @Test
+    fun `given tank is full when flush then open Outlet` (){
+
+        val tank = Tank(state = TankState.FULL, inletValve = inletValve, outletValve =outLetValve)
+
+        tank.flush()
+
+        verify{
+            outLetValve.open()
+        }
     }
 }
