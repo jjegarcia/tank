@@ -11,4 +11,10 @@ class Tank(var state: TankState, val inletValve: InletValve, val outletValve: Ou
         outletValve.open()
     }
 
+    fun lowLevel() {
+        state = TankState.FILLING
+        inletValve.open()
+        outletValve.close()
+    }
+
 }
