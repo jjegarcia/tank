@@ -6,8 +6,8 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 
 class TankTest {
-    private val inletValve: InletValve = mockk<InletValve>(relaxed = true)
-    private val outLetValve = mockk<OutletValve>(relaxed = true)
+    private val inletValve: Valve = mockk<Valve>(relaxed = true)
+    private val outLetValve = mockk<Valve>(relaxed = true)
 
     @Test
     fun `given Tank Is Filling When High Level Reached Then Tank Is Full`(){

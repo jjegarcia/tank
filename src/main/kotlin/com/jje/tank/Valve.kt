@@ -1,6 +1,6 @@
 package com.jje.tank
 
-interface InletValve {
+interface Valve {
     fun close()
     fun open()
 }

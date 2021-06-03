@@ -1,6 +1,6 @@
 package com.jje.tank
 
-class Tank(var state: TankState, val inletValve: InletValve, val outletValve: OutletValve) {
+class Tank(var state: TankState, val inletValve: Valve, val outletValve: Valve) {
     fun highLevel() {
         state = TankState.FULL
         inletValve.close()
