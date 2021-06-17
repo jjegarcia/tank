@@ -37,4 +37,15 @@ class HighLevelTest {
 
         assertEquals(TankState.FLUSHING,tank.state)
     }
+
+    @Test
+    fun `given tank is full when high level then nothing happens`(){
+        val tank = Tank(state = TankState.FULL, inletValve = inletValve, outletValve = outLetValve)
+
+        tank.highLevel()
+
+        verify(exactly = 0) {
+            inletValve.open()
+        }
+    }
 }

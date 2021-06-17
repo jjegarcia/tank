@@ -39,4 +39,18 @@ class FlushTest{
 
         verify(exactly = 0) { outLetValve.open() }
     }
+
+    @Test
+    fun `given tank is flushing when flush then do nothing`(){
+
+        val tank = Tank(state = TankState.FLUSHING, inletValve = inletValve, outletValve = outLetValve)
+
+        tank.flush()
+
+        verify(exactly = 0) {
+            outLetValve.open()
+        }
+    }
+
+
 }

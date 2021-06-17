@@ -45,4 +45,17 @@ class LowLevelTest {
 
         verify(exactly = 0) { inletValve.open() }
     }
+
+    @Test
+    fun `given tank is filling when low level then nothing happens`(){
+
+        val tank = Tank(state = TankState.FILLING, inletValve = inletValve, outletValve = outLetValve)
+
+        tank.lowLevel()
+
+        verify(exactly = 0) {
+            inletValve.close()
+            outLetValve.open()
+        }
+    }
 }
