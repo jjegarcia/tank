@@ -30,8 +30,15 @@ class TankParameterisedTest(
         @Parameterized.Parameters(name = "")
         fun getParameters(): List<TestParameters> {
             return listOf(
+                    TestParameters(TankState.FILLING, Tank::flush, TankState.FILLING),
+                    TestParameters(TankState.FILLING, Tank::lowLevel, TankState.FILLING),
+                    TestParameters(TankState.FILLING, Tank::highLevel, TankState.FULL),
                     TestParameters(TankState.FULL, Tank::flush, TankState.FLUSHING),
-                    TestParameters(TankState.FULL, Tank::flush, TankState.FLUSHING)
+                    TestParameters(TankState.FULL, Tank::lowLevel, TankState.FULL),
+                    TestParameters(TankState.FULL, Tank::highLevel, TankState.FULL),
+                    TestParameters(TankState.FLUSHING, Tank::flush, TankState.FLUSHING),
+                    TestParameters(TankState.FLUSHING, Tank::lowLevel, TankState.FILLING),
+                    TestParameters(TankState.FLUSHING, Tank::highLevel, TankState.FLUSHING)
             )
         }
 
