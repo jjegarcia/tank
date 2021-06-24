@@ -2,22 +2,44 @@ package com.jje.tank
 
 import io.mockk.mockk
 import io.mockk.verify
+import org.junit.Assert.assertEquals
+import org.junit.Before
 import org.junit.Test
 
 class BlockedValveTest {
+    private val output: Output = mockk(relaxed = true)
+    private  lateinit var tank :Tank
 
     @Test
     fun `inlet Valve blocked then notify user`() {
-        val inletValve = mockk<Valve>(relaxed = true)
-        val outletValve = mockk<Valve>(relaxed = true)
-        val output: Output = mockk(relaxed = true)
-        val tank = Tank(state = TankState.FILLING, inletValve = inletValve, outletValve = outletValve, output = output)
-
         tank.inletBlock()
 
         verify {
             output.notify("InletValve: Blocked")
         }
+    }
+
+    @Test
+    fun `inlet Valve blocked then close inlet valve`(){
+        tank.inletBlock()
+
+        verify {
+           tank.inletValve.close()
+        }
+    }
+
+    @Test
+    fun `inlet Valve blocked then blocked state`(){
+        tank.inletBlock()
+        assertEquals(TankState.BLOCKED,tank.state)
+
+    }
+
+    @Before
+    fun setUp() {
+        val inletValve = mockk<Valve>(relaxed = true)
+        val outletValve = mockk<Valve>(relaxed = true)
+        tank = Tank(state = TankState.FILLING, inletValve = inletValve, outletValve = outletValve, output = output)
     }
 
 }
