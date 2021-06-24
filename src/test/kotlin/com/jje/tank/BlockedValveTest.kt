@@ -8,7 +8,7 @@ import org.junit.Test
 
 class BlockedValveTest {
     private val output: Output = mockk(relaxed = true)
-    private  lateinit var tank :Tank
+    private lateinit var tank: Tank
 
     @Test
     fun `inlet Valve blocked then notify user`() {
@@ -20,26 +20,58 @@ class BlockedValveTest {
     }
 
     @Test
-    fun `inlet Valve blocked then close inlet valve`(){
+    fun `inlet Valve blocked then close inlet valve`() {
         tank.inletBlock()
 
         verify {
-           tank.inletValve.close()
+            tank.inletValve.close()
         }
     }
 
     @Test
-    fun `inlet Valve blocked then blocked state`(){
+    fun `inlet Valve blocked then blocked state`() {
         tank.inletBlock()
-        assertEquals(TankState.BLOCKED,tank.state)
+        assertEquals(TankState.BLOCKED, tank.state)
 
+    }
+
+    @Test
+    fun `inlet Valve blocked then fail led is switched on`(){
+
+        tank.inletBlock()
+        verify { tank.led.switchOn() }
+    }
+
+    @Test
+    fun `given blocked when reset then filling`() {
+        tank.inletBlock()
+        tank.reset()
+        assertEquals(TankState.FILLING, tank.state)
+    }
+
+    @Test
+    fun `given blocked when reset then open inlet valve`() {
+        tank.inletBlock()
+        tank.reset()
+
+        verify {
+            tank.inletValve.open()
+        }
+    }
+
+    @Test
+    fun `given blocked when reset then led is switched off`(){
+        tank.inletBlock()
+        tank.reset()
+        verify { tank.led.switchOff() }
     }
 
     @Before
     fun setUp() {
         val inletValve = mockk<Valve>(relaxed = true)
         val outletValve = mockk<Valve>(relaxed = true)
-        tank = Tank(state = TankState.FILLING, inletValve = inletValve, outletValve = outletValve, output = output)
+        tank = Tank(state = TankState.FILLING, inletValve = inletValve, outletValve = outletValve, output = output, led = mockk(relaxed = true))
     }
+
 
 }

@@ -6,7 +6,6 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-import java.util.*
 
 
 @RunWith(value = Parameterized::class)
@@ -20,7 +19,7 @@ class TankParameterisedTest(
     @Test
     fun `after event tank ends in correct state`() {
 
-        val tank = Tank(state = parameters.startState, inletValve = inletValve, outletValve = outLetValve, output =output)
+        val tank = Tank(state = parameters.startState, inletValve = inletValve, outletValve = outLetValve, output =output, led = mockk(relaxed = true))
 
         parameters.action(tank)
         assertEquals(parameters.endState, tank.state)
@@ -29,7 +28,7 @@ class TankParameterisedTest(
     @Test
     fun `after event tank send valve request `() {
 
-        val tank = Tank(state = parameters.startState, inletValve = inletValve, outletValve = outLetValve, output =output)
+        val tank = Tank(state = parameters.startState, inletValve = inletValve, outletValve = outLetValve, output =output, led = mockk(relaxed = true))
 
         val valveRequest: ValveRequest = parameters.valveRequest
 
