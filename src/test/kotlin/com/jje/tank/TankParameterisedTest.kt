@@ -41,14 +41,14 @@ class TankParameterisedTest(
 
     companion object {
         @JvmStatic
-        @Parameterized.Parameters(name = "")
+        @Parameterized.Parameters
         fun getParameters(): List<TestParameters> {
             return listOf(
                     TestParameters(TankState.FILLING, Tank::flush, TankState.FILLING, ValveRequest(0, 0, 0, 0)),
                     TestParameters(TankState.FILLING, Tank::lowLevel, TankState.FILLING, ValveRequest(0, 0, 0, 0)),
                     TestParameters(TankState.FILLING, Tank::highLevel, TankState.FULL, ValveRequest(0, 1, 0, 0)),
                     TestParameters(TankState.FULL, Tank::flush, TankState.FLUSHING, ValveRequest(0, 0, 1, 0)),
-                    TestParameters(TankState.FULL, Tank::lowLevel, TankState.FULL, ValveRequest(0, 0, 0, 0)),
+                    TestParameters(TankState.FULL, Tank::lowLevel, TankState.TANK_LEAK, ValveRequest(0, 0, 0, 0)),
                     TestParameters(TankState.FULL, Tank::highLevel, TankState.FULL, ValveRequest(0, 0, 0, 0)),
                     TestParameters(TankState.FLUSHING, Tank::flush, TankState.FLUSHING, ValveRequest(0, 0, 0, 0)),
                     TestParameters(TankState.FLUSHING, Tank::lowLevel, TankState.FILLING, ValveRequest(1, 0, 0, 1)),

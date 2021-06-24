@@ -22,6 +22,11 @@ class Tank(var state: TankState, val inletValve: Valve, val outletValve: Valve, 
             inletValve.open()
             outletValve.close()
         }
+        if (state==TankState.FULL){
+            state=TankState.TANK_LEAK
+            output.notify("tank leak")
+            led.switchOn()
+        }
     }
 
     fun inletBlock() {
@@ -32,9 +37,10 @@ class Tank(var state: TankState, val inletValve: Valve, val outletValve: Valve, 
     }
 
     fun reset() {
-        inletValve.open()
-        state=TankState.FILLING
-        led.switchOff()
+        if(state==TankState.BLOCKED || state==TankState.TANK_LEAK) {
+            inletValve.open()
+            state = TankState.FILLING
+            led.switchOff()
+        }
     }
-
 }
