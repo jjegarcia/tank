@@ -30,4 +30,9 @@ class Tank(var state: TankState, val inletValve: Valve, val outletValve: Valve, 
         state= TankState.BLOCKED
     }
 
+    fun reset() {
+        inletValve.open()
+        state=TankState.FILLING
+    }
+
 }
