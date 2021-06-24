@@ -6,7 +6,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Test
 import org.junit.runner.RunWith
 import org.junit.runners.Parameterized
-import kotlin.reflect.KFunction1
+import java.util.*
 
 
 @RunWith(value = Parameterized::class)
@@ -16,11 +16,11 @@ class TankParameterisedTest(
 
     private val inletValve: Valve = mockk<Valve>(relaxed = true)
     private val outLetValve = mockk<Valve>(relaxed = true)
-
+    private val output= mockk<Output>(relaxed = true)
     @Test
     fun `after event tank ends in correct state`() {
 
-        val tank = Tank(state = parameters.startState, inletValve = inletValve, outletValve = outLetValve)
+        val tank = Tank(state = parameters.startState, inletValve = inletValve, outletValve = outLetValve, output =output)
 
         parameters.action(tank)
         assertEquals(parameters.endState, tank.state)
@@ -29,7 +29,7 @@ class TankParameterisedTest(
     @Test
     fun `after event tank send valve request `() {
 
-        val tank = Tank(state = parameters.startState, inletValve = inletValve, outletValve = outLetValve)
+        val tank = Tank(state = parameters.startState, inletValve = inletValve, outletValve = outLetValve, output =output)
 
         val valveRequest: ValveRequest = parameters.valveRequest
 

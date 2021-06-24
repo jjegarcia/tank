@@ -1,6 +1,6 @@
 package com.jje.tank
 
-class Tank(var state: TankState, val inletValve: Valve, val outletValve: Valve) {
+class Tank(var state: TankState, val inletValve: Valve, val outletValve: Valve, val output: Output) {
     fun highLevel() {
         if (state == TankState.FILLING) {
             state = TankState.FULL
@@ -22,6 +22,12 @@ class Tank(var state: TankState, val inletValve: Valve, val outletValve: Valve) 
             inletValve.open()
             outletValve.close()
         }
+    }
+
+    fun inletBlock() {
+        inletValve.close()
+        output.notify("InletValve: Blocked")
+        state= TankState.BLOCKED
     }
 
 }
