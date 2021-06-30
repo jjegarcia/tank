@@ -81,6 +81,26 @@ class TankLeakTest {
     }
 
     @Test
+    fun `given Filling when reset then should not close inlet valve`(){
+        tank.state=TankState.FILLING
+        tank.reset()
+
+        verify(exactly = 0) {
+            tank.inletValve.close()
+        }
+    }
+
+    @Test
+    fun `given Filling when reset then should not open outlet valve`(){
+        tank.state=TankState.FILLING
+        tank.reset()
+
+        verify(exactly = 0) {
+            tank.outletValve.open()
+        }
+    }
+
+    @Test
     fun `given tank is leaking when reset then should open inlet valve`(){
         tank.state=TankState.TANK_LEAK
         tank.reset()
