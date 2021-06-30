@@ -51,6 +51,54 @@ class TankLeakTest {
             }
     }
 
+    @Test
+    fun `given tank is FULL when reset then should not open outlet valve`(){
+        tank.reset()
+
+        verify(exactly = 0) {
+            tank.outletValve.open()
+        }
+    }
+
+    @Test
+    fun `given Flushing when reset then should not close outlet valve`(){
+        tank.state=TankState.FLUSHING
+        tank.reset()
+
+        verify(exactly = 0) {
+            tank.outletValve.close()
+        }
+    }
+
+    @Test
+    fun `given Flushing when reset then should not open inlet valve`(){
+        tank.state=TankState.FLUSHING
+        tank.reset()
+
+        verify(exactly = 0) {
+            tank.inletValve.open()
+        }
+    }
+
+    @Test
+    fun `given tank is leaking when reset then should open inlet valve`(){
+        tank.state=TankState.TANK_LEAK
+        tank.reset()
+
+        verify(exactly = 1) {
+            tank.inletValve.open()
+        }
+    }
+
+    @Test
+    fun `given tank is leaking when reset then led should turn off`(){
+        tank.state=TankState.TANK_LEAK
+        tank.reset()
+
+        verify(exactly = 1) {
+            tank.inletValve.open()
+        }
+    }
 
     @Before
     fun setUp() {
