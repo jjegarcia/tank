@@ -116,7 +116,7 @@ class TankLeakTest {
         tank.reset()
 
         verify(exactly = 1) {
-            tank.inletValve.open()
+            tank.led.switchOff()
         }
     }
 

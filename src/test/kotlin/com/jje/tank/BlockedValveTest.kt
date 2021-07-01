@@ -66,6 +66,7 @@ class BlockedValveTest {
         verify { tank.led.switchOff() }
     }
 
+
     @Before
     fun setUp() {
         val inletValve = mockk<Valve>(relaxed = true)
