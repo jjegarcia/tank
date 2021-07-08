@@ -4,6 +4,7 @@ enum class TankState {
     FULL,
     FILLING,
     FLUSHING,
-    BLOCKED,
-    TANK_LEAK
+    BLOCKED_INLET,
+    TANK_LEAK,
+    BLOCKED_OUTLET
 }

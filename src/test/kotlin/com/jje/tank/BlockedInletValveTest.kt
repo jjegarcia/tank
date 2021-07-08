@@ -6,7 +6,7 @@ import org.junit.Assert.assertEquals
 import org.junit.Before
 import org.junit.Test
 
-class BlockedValveTest {
+class BlockedInletValveTest {
     private val output: Output = mockk(relaxed = true)
     private lateinit var tank: Tank
 
@@ -31,7 +31,7 @@ class BlockedValveTest {
     @Test
     fun `inlet Valve blocked then blocked state`() {
         tank.inletBlock()
-        assertEquals(TankState.BLOCKED, tank.state)
+        assertEquals(TankState.BLOCKED_INLET, tank.state)
 
     }
 
