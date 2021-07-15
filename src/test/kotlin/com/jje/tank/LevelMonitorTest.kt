@@ -53,6 +53,49 @@ class LevelMonitorTest {
         }
     }
 
+    @Test
+    fun `given Filling when no transition below to high level then remains in filling`() {
 
+        val tank = mockk<Tank>(relaxed = true)
+        every { tank.state } returns TankState.FILLING
+        val levelMonitor = LevelMonitor(tank)
+        levelMonitor.current(HIGH_LEVEL-2)
+        levelMonitor.current(HIGH_LEVEL-1)
+
+
+        verify(exactly = 0) {
+            tank.highLevel()
+        }
+    }
+
+    @Test
+    fun `given Full when no transition  then remains in full`() {
+
+        val tank = mockk<Tank>(relaxed = true)
+        every { tank.state } returns TankState.FULL
+        val levelMonitor = LevelMonitor(tank)
+        levelMonitor.current(HIGH_LEVEL)
+
+        verify(exactly = 0) {
+            tank.lowLevel()
+        }
+        verify{
+            tank.highLevel()
+        }
+    }
+
+    @Test
+    fun `given Flushing when no transition above to low level then remains in flushing`() {
+
+        val tank = mockk<Tank>(relaxed = true)
+        every { tank.state } returns TankState.FLUSHING
+        val levelMonitor = LevelMonitor(tank)
+        levelMonitor.current(HIGH_LEVEL-1)
+        levelMonitor.current(HIGH_LEVEL-2)
+
+        verify(exactly = 0) {
+            tank.lowLevel()
+        }
+    }
 
 }
