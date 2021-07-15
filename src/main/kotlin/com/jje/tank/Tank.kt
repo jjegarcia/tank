@@ -42,17 +42,27 @@ class Tank(var state: TankState, val inletValve: Valve, val outletValve: Valve, 
             state = TankState.FILLING
             led.switchOff()
         }
-        if(state==TankState.BLOCKED_OUTLET){
-            state= TankState.FLUSHING
+        if (state == TankState.BLOCKED_OUTLET) {
+            state = TankState.FLUSHING
             led.switchOff()
             outletValve.close()
+        }
+        if (state == TankState.INLET_LEAK) {
+            state = TankState.FULL
+            led.switchOff()
         }
     }
 
     fun outletBlocked() {
-        state=TankState.BLOCKED_OUTLET
+        state = TankState.BLOCKED_OUTLET
         output.notify("Outlet Valve Blocked")
         led.switchOn()
         outletValve.close()
+    }
+
+    fun overflow() {
+        state = TankState.INLET_LEAK
+        output.notify("Overflow: Check inlet valve")
+        led.switchOn()
     }
 }
