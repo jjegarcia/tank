@@ -12,5 +12,4 @@ class LevelMonitor(val tank: Tank) {
             tank.highLevel()
         }
     }
-
 }
