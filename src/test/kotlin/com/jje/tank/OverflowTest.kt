@@ -54,6 +54,7 @@ class OverflowTest {
             led.switchOff()
         }
     }
+
     @Test
     fun `given Inlet Leak when Reset then Full`() {
         tank = Tank(TankState.INLET_LEAK, inletValve, outletValve, output, led)
@@ -63,6 +64,4 @@ class OverflowTest {
         assertEquals(TankState.FULL,tank.state)
 
      }
-
-
 }
