@@ -11,7 +11,6 @@ class LevelMonitorTest {
 
     @Test
     fun `given Flushing when transition above to below low level then Low Level`() {
-
         val tank = mockk<Tank>(relaxed = true)
         every { tank.state } returns TankState.FLUSHING
         val levelMonitor = LevelMonitor(tank, REPETITION_LIMIT)
@@ -26,7 +25,6 @@ class LevelMonitorTest {
 
     @Test
     fun `given Flushing when transition not met then nothing happens`() {
-
         val tank = mockk<Tank>(relaxed = true)
         every { tank.state } returns TankState.FLUSHING
         val levelMonitor = LevelMonitor(tank, REPETITION_LIMIT)
@@ -48,7 +46,6 @@ class LevelMonitorTest {
         levelMonitor.current(HIGH_LEVEL - 1)
         levelMonitor.current(HIGH_LEVEL)
 
-
         verify {
             tank.highLevel()
         }
@@ -63,7 +60,6 @@ class LevelMonitorTest {
         levelMonitor.current(HIGH_LEVEL - 2)
         levelMonitor.current(HIGH_LEVEL - 1)
 
-
         verify(exactly = 0) {
             tank.highLevel()
         }
@@ -71,7 +67,6 @@ class LevelMonitorTest {
 
     @Test
     fun `given Full when no transition  then remains in full`() {
-
         val tank = mockk<Tank>(relaxed = true)
         every { tank.state } returns TankState.FULL
         val levelMonitor = LevelMonitor(tank, REPETITION_LIMIT)
@@ -87,7 +82,6 @@ class LevelMonitorTest {
 
     @Test
     fun `given Flushing when no transition above to low level then remains in flushing`() {
-
         val tank = mockk<Tank>(relaxed = true)
         every { tank.state } returns TankState.FLUSHING
         val levelMonitor = LevelMonitor(tank, REPETITION_LIMIT)
@@ -100,7 +94,7 @@ class LevelMonitorTest {
     }
 
     @Test
-    fun `given Full when level is greater than current few time then overflow should be invoked`() {
+    fun `given Full when level is greater than current few times then overflow should be invoked`() {
         val tank = mockk<Tank>(relaxed = true)
         every { tank.state } returns TankState.FULL
         val levelMonitor = LevelMonitor(tank, REPETITION_LIMIT)
@@ -108,8 +102,6 @@ class LevelMonitorTest {
         levelMonitor.current(HIGH_LEVEL+1)
         levelMonitor.current(HIGH_LEVEL+2)
         levelMonitor.current(HIGH_LEVEL+3)
-
-
 
         verify {
             tank.overflow()
