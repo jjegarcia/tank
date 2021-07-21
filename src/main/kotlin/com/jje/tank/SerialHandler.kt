@@ -15,14 +15,21 @@ class SerialHandler {
     }
 
     @ExperimentalStdlibApi
-     fun writeSerial(inputBuffer: String) {
-        serialPort.writeBytes(inputBuffer.encodeToByteArray())
+     fun writeSerialString(inputBuffer: String) {
+        writeSerialBytes(inputBuffer.encodeToByteArray())
     }
 
-    fun readSerial(byteCount: Int): String {
-        return serialPort.readBytes(byteCount).toString()
+    fun readSerialString(byteCount: Int): String {
+        return readSerialBytes(byteCount).toString()
     }
 
+    fun writeSerialBytes(inputBuffer: ByteArray){
+        serialPort.writeBytes(inputBuffer)
+    }
+
+    fun readSerialBytes(byteCount: Int): ByteArray? {
+        return serialPort.readBytes()
+    }
     fun closePort(){
         serialPort.closePort()
     }

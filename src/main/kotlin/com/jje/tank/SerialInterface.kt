@@ -6,6 +6,8 @@ interface SerialInterface {
     fun serialPortInit(): SerialPort
     fun writeSerial(inputBuffer: String)
     fun readSerial(byteCount: Int): String
+    fun writeSerialBytes(inputBuffer: ByteArray)
+    fun readSerialBytes(byteCount: Int): ByteArray?
     fun closePort()
 }
 
@@ -17,11 +19,19 @@ class SerialWrapper() : SerialInterface {
 
     @ExperimentalStdlibApi
     override fun writeSerial(inputBuffer: String) {
-        serialHandler.writeSerial(inputBuffer)
+        serialHandler.writeSerialString(inputBuffer)
     }
 
     override fun readSerial(byteCount: Int): String {
-        return serialHandler.readSerial(byteCount)
+        return serialHandler.readSerialString(byteCount)
+    }
+
+    override fun writeSerialBytes(inputBuffer: ByteArray) {
+        serialHandler.writeSerialBytes(inputBuffer)
+    }
+
+    override fun readSerialBytes(byteCount: Int): ByteArray? {
+        return serialHandler.readSerialBytes(byteCount)
     }
 
     override fun closePort() {
