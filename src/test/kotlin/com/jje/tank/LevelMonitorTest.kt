@@ -101,10 +101,25 @@ class LevelMonitorTest {
         levelMonitor.current(HIGH_LEVEL)
         levelMonitor.current(HIGH_LEVEL+1)
         levelMonitor.current(HIGH_LEVEL+2)
-        levelMonitor.current(HIGH_LEVEL+3)
+        levelMonitor.current(HIGH_LEVEL+9)
 
         verify {
             tank.overflow()
         }
     }
+    @Test
+    fun `given Full when level is not greater than current few times then overflow should be invoked`() {
+        val tank = mockk<Tank>(relaxed = true)
+        every { tank.state } returns TankState.FULL
+        val levelMonitor = LevelMonitor(tank, REPETITION_LIMIT)
+        levelMonitor.current(HIGH_LEVEL)
+        levelMonitor.current(HIGH_LEVEL+9)
+        levelMonitor.current(HIGH_LEVEL+2)
+        levelMonitor.current(HIGH_LEVEL+8)
+
+        verify(exactly = 0){
+            tank.overflow()
+        }
+    }
+
 }

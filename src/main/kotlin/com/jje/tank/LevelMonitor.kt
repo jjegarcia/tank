@@ -17,9 +17,24 @@ class LevelMonitor(val tank: Tank, val repetitionLimit: Int) {
         val matcher = levelHistory.filter { level ->
             level > HIGH_LEVEL
         }
-        if (matcher.size == stateHistory.size) {
+        if (matcher.size == stateHistory.size && levelIncreasing(matcher)) {
             tank.overflow()
         }
+    }
+
+    private fun levelIncreasing(matcher: List<Int>): Boolean {
+        if (matcher.size == repetitionLimit) {
+            var increasing: Boolean = true
+            var previous = matcher[0]
+            matcher.forEachIndexed { index, level ->
+                if (index > 0) {
+                    increasing = increasing && level > previous
+                    previous = level
+                }
+            }
+            return increasing
+        }
+        return false
     }
 
     private fun updateHistory(state: TankState, level: Int) {
