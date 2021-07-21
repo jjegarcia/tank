@@ -5,6 +5,7 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.Test
 
+const val REPETITION_LIMIT = 3
 
 class LevelMonitorTest {
 
@@ -13,8 +14,8 @@ class LevelMonitorTest {
 
         val tank = mockk<Tank>(relaxed = true)
         every { tank.state } returns TankState.FLUSHING
-        val levelMonitor = LevelMonitor(tank)
-        levelMonitor.current(LOW_LEVEL+1)
+        val levelMonitor = LevelMonitor(tank, REPETITION_LIMIT)
+        levelMonitor.current(LOW_LEVEL + 1)
         levelMonitor.current(LOW_LEVEL)
 
 
@@ -28,9 +29,9 @@ class LevelMonitorTest {
 
         val tank = mockk<Tank>(relaxed = true)
         every { tank.state } returns TankState.FLUSHING
-        val levelMonitor = LevelMonitor(tank)
-        levelMonitor.current(LOW_LEVEL+2)
-        levelMonitor.current(LOW_LEVEL+1)
+        val levelMonitor = LevelMonitor(tank, REPETITION_LIMIT)
+        levelMonitor.current(LOW_LEVEL + 2)
+        levelMonitor.current(LOW_LEVEL + 1)
 
 
         verify(exactly = 0) {
@@ -43,8 +44,8 @@ class LevelMonitorTest {
 
         val tank = mockk<Tank>(relaxed = true)
         every { tank.state } returns TankState.FILLING
-        val levelMonitor = LevelMonitor(tank)
-        levelMonitor.current(HIGH_LEVEL-1)
+        val levelMonitor = LevelMonitor(tank, REPETITION_LIMIT)
+        levelMonitor.current(HIGH_LEVEL - 1)
         levelMonitor.current(HIGH_LEVEL)
 
 
@@ -58,9 +59,9 @@ class LevelMonitorTest {
 
         val tank = mockk<Tank>(relaxed = true)
         every { tank.state } returns TankState.FILLING
-        val levelMonitor = LevelMonitor(tank)
-        levelMonitor.current(HIGH_LEVEL-2)
-        levelMonitor.current(HIGH_LEVEL-1)
+        val levelMonitor = LevelMonitor(tank, REPETITION_LIMIT)
+        levelMonitor.current(HIGH_LEVEL - 2)
+        levelMonitor.current(HIGH_LEVEL - 1)
 
 
         verify(exactly = 0) {
@@ -73,13 +74,13 @@ class LevelMonitorTest {
 
         val tank = mockk<Tank>(relaxed = true)
         every { tank.state } returns TankState.FULL
-        val levelMonitor = LevelMonitor(tank)
+        val levelMonitor = LevelMonitor(tank, REPETITION_LIMIT)
         levelMonitor.current(HIGH_LEVEL)
 
         verify(exactly = 0) {
             tank.lowLevel()
         }
-        verify{
+        verify {
             tank.highLevel()
         }
     }
@@ -89,13 +90,29 @@ class LevelMonitorTest {
 
         val tank = mockk<Tank>(relaxed = true)
         every { tank.state } returns TankState.FLUSHING
-        val levelMonitor = LevelMonitor(tank)
-        levelMonitor.current(HIGH_LEVEL-1)
-        levelMonitor.current(HIGH_LEVEL-2)
+        val levelMonitor = LevelMonitor(tank, REPETITION_LIMIT)
+        levelMonitor.current(HIGH_LEVEL - 1)
+        levelMonitor.current(HIGH_LEVEL - 2)
 
         verify(exactly = 0) {
             tank.lowLevel()
         }
     }
 
- }
+    @Test
+    fun `given Full when level is greater than current few time then overflow should be invoked`() {
+        val tank = mockk<Tank>(relaxed = true)
+        every { tank.state } returns TankState.FULL
+        val levelMonitor = LevelMonitor(tank, REPETITION_LIMIT)
+        levelMonitor.current(HIGH_LEVEL)
+        levelMonitor.current(HIGH_LEVEL+1)
+        levelMonitor.current(HIGH_LEVEL+2)
+        levelMonitor.current(HIGH_LEVEL+3)
+
+
+
+        verify {
+            tank.overflow()
+        }
+    }
+}
