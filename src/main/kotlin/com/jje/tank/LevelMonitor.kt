@@ -14,13 +14,18 @@ class LevelMonitor(val tank: Tank, val repetitionLimit: Int) {
             tank.highLevel()
         }
         updateHistory(tank.state, level)
+        val matcher = levelHistory.filter { level ->
+            level > HIGH_LEVEL
+        }
+        if (matcher.size == stateHistory.size) {
+            tank.overflow()
+        }
     }
 
     private fun updateHistory(state: TankState, level: Int) {
         addHistory(
                 stateFunction = { addStateHistory(stateHistory, state) },
-                levelFunction = { addLevelHistory(levelHistory, level) },
-                historyType = HistoryType.STATE
+                levelFunction = { addLevelHistory(levelHistory, level) }
         )
     }
 
@@ -29,6 +34,11 @@ class LevelMonitor(val tank: Tank, val repetitionLimit: Int) {
             HistoryType.STATE -> stateFunction()
             else -> levelFunction()
         }
+    }
+
+    private fun addHistory(stateFunction: () -> Unit, levelFunction: () -> Unit) {
+        stateFunction.invoke()
+        levelFunction.invoke()
     }
 
     private fun addStateHistory(historyList: MutableList<TankState>, state: TankState) {
@@ -44,6 +54,7 @@ class LevelMonitor(val tank: Tank, val repetitionLimit: Int) {
             historyList.removeAt(0) //FIFO
         }
     }
+
     private fun wipeStateHistory() {
         stateHistory.removeAll { true }
     }
