@@ -17,14 +17,14 @@ class LevelMonitor(val tank: Tank, val repetitionLimit: Int) {
         val matcher = levelHistory.filter { level ->
             level > HIGH_LEVEL
         }
-        if (matcher.size == stateHistory.size && levelIncreasing(matcher)) {
+        if (matcher.size == stateHistory.size && levelDifferential(matcher, Slope.INC)) { //levelIncreasing(matcher)) {
             tank.overflow()
         }
     }
 
     private fun levelIncreasing(matcher: List<Int>): Boolean {
         if (matcher.size == repetitionLimit) {
-            var increasing: Boolean = true
+            var increasing = true
             var previous = matcher[0]
             matcher.forEachIndexed { index, level ->
                 if (index > 0) {
@@ -35,6 +35,31 @@ class LevelMonitor(val tank: Tank, val repetitionLimit: Int) {
             return increasing
         }
         return false
+    }
+
+    private fun levelDifferential(matcher: List<Int>, slope: Slope): Boolean {
+        if (matcher.size == repetitionLimit) {
+            var differential = 0
+            var previous = matcher[0]
+            matcher.forEachIndexed { index, level ->
+                if (index > 0) {
+                    differential += getDifferential(slope, level, previous)
+                    previous = level
+                }
+            }
+            return differential == repetitionLimit - 1
+        }
+        return false
+    }
+
+    private fun getDifferential(slope: Slope, level: Int, previuos: Int): Int {
+        val predicate = when (slope) {
+            Slope.INC -> level > previuos
+            Slope.DEC -> level < previuos
+            Slope.EQU -> level == previuos
+        }
+        return if (predicate) 1
+        else 0
     }
 
     private fun updateHistory(state: TankState, level: Int) {
@@ -81,6 +106,12 @@ class LevelMonitor(val tank: Tank, val repetitionLimit: Int) {
     companion object {
         enum class HistoryType {
             STATE,
+        }
+
+        enum class Slope {
+            INC,
+            DEC,
+            EQU
         }
     }
 }
