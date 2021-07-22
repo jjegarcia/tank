@@ -17,7 +17,7 @@ class LevelMonitor(val tank: Tank, val repetitionLimit: Int) {
         val matcher = levelHistory.filter { level ->
             level > HIGH_LEVEL
         }
-        if (matcher.size == stateHistory.size && levelDifferential(matcher, Slope.INC)) { //levelIncreasing(matcher)) {
+        if (matcher.size == stateHistory.size && levelDifferential(matcher = matcher, slope = Slope.INC)) {
             tank.overflow()
         }
     }
