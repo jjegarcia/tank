@@ -3,10 +3,14 @@ package com.jje.tank
 const val LOW_LEVEL = 100
 const val HIGH_LEVEL = 1000
 
-class LevelMonitor(val tank: Tank, val repetitionLimit: Int) {
+interface LevelMonitor {
+    fun current(level: Int)
+}
+
+class TankLevelMonitor(val tank: Tank, val repetitionLimit: Int) : LevelMonitor {
     val levelHistory: MutableList<Int> = mutableListOf()
     val stateHistory: MutableList<TankState> = mutableListOf()
-    fun current(level: Int) {
+    override fun current(level: Int) {
         if (level <= LOW_LEVEL) {
             tank.lowLevel()
         }
