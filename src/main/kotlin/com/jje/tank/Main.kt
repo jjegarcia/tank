@@ -9,7 +9,7 @@ fun main(args: Array<String>) {
             inletValve = ValveWrapper(),
             outletValve = ValveWrapper(),
             output = OutputWrapper(serialWrapper = serialWrapper),
-            led = LedWrapper()
+            led = TankLed()
     )
     Program(serialWrapper, TimerDelayHandler(), TankLevelMonitor(tank, 3), MultithreadedProcess()).start()
 }

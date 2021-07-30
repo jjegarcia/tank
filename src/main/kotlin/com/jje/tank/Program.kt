@@ -13,6 +13,6 @@ class Program(val serialWrapper: SerialInterface, val timerHandler: TimerHandler
             timerHandler.delay(1000)
             println("digipot:$digipotValue")
         }
-//        serialWrapper.closePort()//Close serial port
+        serialWrapper.closePort()
     }
 }
