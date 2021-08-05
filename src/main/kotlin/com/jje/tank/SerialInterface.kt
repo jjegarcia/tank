@@ -5,36 +5,36 @@ import jssc.SerialPort
 interface SerialInterface {
     fun serialPortInit(): SerialPort
     fun writeSerial(inputBuffer: String)
-    fun readSerial(byteCount: Int): String
     fun writeSerialBytes(inputBuffer: ByteArray)
     fun readSerialBytes(byteCount: Int): ByteArray?
     fun closePort()
 }
 
 class SerialWrapper() : SerialInterface {
-    val serialHandler = SerialHandler()
+    lateinit var serialPort: SerialPort
     override fun serialPortInit(): SerialPort {
-        return serialHandler.serialPortInit()
+        serialPort = SerialPort("/dev/tty.Bluetooth-Incoming-Port")
+        serialPort.openPort();//Open serial port
+        serialPort.setParams(SerialPort.BAUDRATE_9600,
+                SerialPort.DATABITS_8,
+                SerialPort.STOPBITS_1,
+                SerialPort.PARITY_NONE) //Set params. Also you can set params by this string: serialPort.setParams(9600, 8, 1, 0);
+        return serialPort
     }
 
     @ExperimentalStdlibApi
     override fun writeSerial(inputBuffer: String) {
-        serialHandler.writeSerialString(inputBuffer)
+        writeSerialBytes(inputBuffer.encodeToByteArray())
     }
 
-    override fun readSerial(byteCount: Int): String {
-        return serialHandler.readSerialString(byteCount)
-    }
-
-    override fun writeSerialBytes(inputBuffer: ByteArray) {
-        serialHandler.writeSerialBytes(inputBuffer)
+    override fun writeSerialBytes(inputBuffer: ByteArray){
+        serialPort.writeBytes(inputBuffer)
     }
 
     override fun readSerialBytes(byteCount: Int): ByteArray? {
-        return serialHandler.readSerialBytes(byteCount)
+        return serialPort.readBytes()
     }
-
-    override fun closePort() {
-        serialHandler.closePort()
+    override fun closePort(){
+        serialPort.closePort()
     }
 }
