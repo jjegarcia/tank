@@ -13,7 +13,7 @@ interface SerialInterface {
 class SerialWrapper() : SerialInterface {
     lateinit var serialPort: SerialPort
     override fun serialPortInit(): SerialPort {
-        serialPort = SerialPort("/dev/tty.Bluetooth-Incoming-Port")
+        serialPort = SerialPort("/dev/tty.usbmodem02691")
         serialPort.openPort();//Open serial port
         serialPort.setParams(SerialPort.BAUDRATE_9600,
                 SerialPort.DATABITS_8,
