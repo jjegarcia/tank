@@ -11,5 +11,5 @@ fun main(args: Array<String>) {
             output = OutputWrapper(serialWrapper = serialWrapper),
             led = TankLed()
     )
-    Program(serialWrapper, TimerDelayHandler(), TankLevelMonitor(tank, 3), MultithreadedProcess()).start()
+    Program(serialWrapper, TimerDelayHandler(), TankLevelMonitor(tank, OverflowMonitor(3)), MultithreadedProcess()).start()
 }

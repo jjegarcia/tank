@@ -13,7 +13,7 @@ class TankLevelMonitorTest {
     fun `given Flushing when transition above to below low level then Low Level`() {
         val tank = mockk<Tank>(relaxed = true)
         every { tank.state } returns TankState.FLUSHING
-        val levelMonitor = TankLevelMonitor(tank, REPETITION_LIMIT)
+        val levelMonitor = TankLevelMonitor(tank, OverflowMonitor( REPETITION_LIMIT))
         levelMonitor.current(LOW_LEVEL + 1)
         levelMonitor.current(LOW_LEVEL)
 
@@ -27,7 +27,7 @@ class TankLevelMonitorTest {
     fun `given Flushing when transition not met then nothing happens`() {
         val tank = mockk<Tank>(relaxed = true)
         every { tank.state } returns TankState.FLUSHING
-        val levelMonitor = TankLevelMonitor(tank, REPETITION_LIMIT)
+        val levelMonitor = TankLevelMonitor(tank, OverflowMonitor( REPETITION_LIMIT))
         levelMonitor.current(LOW_LEVEL + 2)
         levelMonitor.current(LOW_LEVEL + 1)
 
@@ -42,7 +42,7 @@ class TankLevelMonitorTest {
 
         val tank = mockk<Tank>(relaxed = true)
         every { tank.state } returns TankState.FILLING
-        val levelMonitor = TankLevelMonitor(tank, REPETITION_LIMIT)
+        val levelMonitor = TankLevelMonitor(tank, OverflowMonitor( REPETITION_LIMIT))
         levelMonitor.current(HIGH_LEVEL - 1)
         levelMonitor.current(HIGH_LEVEL)
 
@@ -56,7 +56,7 @@ class TankLevelMonitorTest {
 
         val tank = mockk<Tank>(relaxed = true)
         every { tank.state } returns TankState.FILLING
-        val levelMonitor = TankLevelMonitor(tank, REPETITION_LIMIT)
+        val levelMonitor = TankLevelMonitor(tank, OverflowMonitor( REPETITION_LIMIT))
         levelMonitor.current(HIGH_LEVEL - 2)
         levelMonitor.current(HIGH_LEVEL - 1)
 
@@ -69,7 +69,7 @@ class TankLevelMonitorTest {
     fun `given Full when no transition  then remains in full`() {
         val tank = mockk<Tank>(relaxed = true)
         every { tank.state } returns TankState.FULL
-        val levelMonitor = TankLevelMonitor(tank, REPETITION_LIMIT)
+        val levelMonitor = TankLevelMonitor(tank, OverflowMonitor( REPETITION_LIMIT))
         levelMonitor.current(HIGH_LEVEL)
 
         verify(exactly = 0) {
@@ -84,7 +84,7 @@ class TankLevelMonitorTest {
     fun `given Flushing when no transition above to low level then remains in flushing`() {
         val tank = mockk<Tank>(relaxed = true)
         every { tank.state } returns TankState.FLUSHING
-        val levelMonitor = TankLevelMonitor(tank, REPETITION_LIMIT)
+        val levelMonitor = TankLevelMonitor(tank, OverflowMonitor( REPETITION_LIMIT))
         levelMonitor.current(HIGH_LEVEL - 1)
         levelMonitor.current(HIGH_LEVEL - 2)
 
@@ -97,7 +97,7 @@ class TankLevelMonitorTest {
     fun `given Full when level is greater than current few times then overflow should be invoked`() {
         val tank = mockk<Tank>(relaxed = true)
         every { tank.state } returns TankState.FULL
-        val levelMonitor = TankLevelMonitor(tank, REPETITION_LIMIT)
+        val levelMonitor = TankLevelMonitor(tank, OverflowMonitor( REPETITION_LIMIT))
         levelMonitor.current(HIGH_LEVEL)
         levelMonitor.current(HIGH_LEVEL+1)
         levelMonitor.current(HIGH_LEVEL+2)
@@ -111,7 +111,7 @@ class TankLevelMonitorTest {
     fun `given Full when level is not greater than current few times then overflow should be invoked`() {
         val tank = mockk<Tank>(relaxed = true)
         every { tank.state } returns TankState.FULL
-        val levelMonitor = TankLevelMonitor(tank, REPETITION_LIMIT)
+        val levelMonitor = TankLevelMonitor(tank, OverflowMonitor(REPETITION_LIMIT))
         levelMonitor.current(HIGH_LEVEL)
         levelMonitor.current(HIGH_LEVEL+9)
         levelMonitor.current(HIGH_LEVEL+2)

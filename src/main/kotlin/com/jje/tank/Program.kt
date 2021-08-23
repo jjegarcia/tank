@@ -8,8 +8,8 @@ class Program(val serialWrapper: SerialInterface, val timerHandler: TimerHandler
         serialWrapper.serialPortInit()
 
         while (process.running()) {
-            digipotValue = serialWrapper.readSerialBytes(1)?.get(0)?.toInt() ?: -1
-            levelMonitor.current(digipotValue)
+            digipotValue = serialWrapper.readSerialBytes(1)?.get(0)?.toInt() ?: -100
+             levelMonitor.current(digipotValue)
             timerHandler.delay(1000)
             println("digipot:$digipotValue")
         }
