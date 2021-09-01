@@ -26,6 +26,12 @@ class TankLevelMonitor(val tank: Tank, val overflowMonitor: OverflowMonitor) : L
         if (tank.state== TankState.FILLING && overflowMonitor.levelNotChanged(level)){
             tank.inletBlock()
         }
+        if (tank.state== TankState.FLUSHING && overflowMonitor.levelNotChanged(level)) {
+            tank.outletBlocked()
+        }
+        if (tank.state==TankState.FULL && overflowMonitor.levelDecreasing(level)){
+            tank.leak()
+        }
     }
 }
 

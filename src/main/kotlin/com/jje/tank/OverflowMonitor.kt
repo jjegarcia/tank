@@ -28,6 +28,12 @@ class OverflowMonitor(val repetitionLimit: Int, val differentialCalculator: Diff
         return levelHistory.toHashSet().size == 1 && levelHistory.size == repetitionLimit
     }
 
+    fun levelDecreasing(level: Int): Boolean {
+        updateHistory(level)
+        val sortedHistory= levelHistory.sortedDescending()
+        return sortedHistory== levelHistory
+    }
+
     companion object {
 
         enum class Slope {

@@ -65,4 +65,8 @@ class Tank(var state: TankState, val inletValve: Valve, val outletValve: Valve, 
         output.notify("Overflow: Check inlet valve")
         led.switchOn()
     }
+
+    fun leak() {
+
+    }
 }
