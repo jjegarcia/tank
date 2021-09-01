@@ -20,7 +20,12 @@ class TankLevelMonitor(val tank: Tank, val overflowMonitor: OverflowMonitor) : L
         if (level >= HIGH_LEVEL) {
             tank.highLevel()
         }
-        overflowMonitor.detectOverflow(level, tank)
+        if (overflowMonitor.isOverflowing(level)) {
+            tank.overflow()
+        }
+        if (tank.state== TankState.FILLING && overflowMonitor.levelNotChanged(level)){
+            tank.inletBlock()
+        }
     }
 }
 
