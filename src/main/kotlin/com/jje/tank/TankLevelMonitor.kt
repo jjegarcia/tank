@@ -11,6 +11,7 @@ class TankLevelMonitor(val tank: Tank, val overflowMonitor: OverflowMonitor) : L
             return
         }
         analyseLevel(input)
+        overflowMonitor.updateHistory(input)
     }
 
     private fun analyseLevel(level: Int) {

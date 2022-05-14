@@ -86,7 +86,8 @@ class TankLevelMonitorTest {
         levelMonitor.current(HIGH_LEVEL)
         levelMonitor.current(HIGH_LEVEL + 1)
         levelMonitor.current(HIGH_LEVEL + 2)
-        levelMonitor.current(HIGH_LEVEL + 9)
+        levelMonitor.current(HIGH_LEVEL + 5)
+        levelMonitor.current(HIGH_LEVEL + 8)
 
         verify {
             tank.overflow()
@@ -113,6 +114,7 @@ class TankLevelMonitorTest {
         levelMonitor.current(LOW_LEVEL + 5)
         levelMonitor.current(LOW_LEVEL + 5)
         levelMonitor.current(LOW_LEVEL + 5)
+        levelMonitor.current(LOW_LEVEL + 5)
 
 
         verify { tank.inletBlock() }
@@ -121,6 +123,7 @@ class TankLevelMonitorTest {
     @Test
     fun `given Flushing when level is not decreasing then blocked outlet`() {
         val levelMonitor = setUpTankLevelMonitor(TankState.FLUSHING)
+        levelMonitor.current((HIGH_LEVEL - 5))
         levelMonitor.current((HIGH_LEVEL - 5))
         levelMonitor.current((HIGH_LEVEL - 5))
         levelMonitor.current((HIGH_LEVEL - 5))
@@ -137,10 +140,11 @@ class TankLevelMonitorTest {
 
     @Test
     fun `given Full when level is decreasing then tank leak`() {
-        val levelMonitor=setUpTankLevelMonitor(TankState.FULL)
-        levelMonitor.current(HIGH_LEVEL-4)
-        levelMonitor.current(HIGH_LEVEL-5)
-        levelMonitor.current(HIGH_LEVEL-6)
+        val levelMonitor = setUpTankLevelMonitor(TankState.FULL)
+        levelMonitor.current(HIGH_LEVEL - 4)
+        levelMonitor.current(HIGH_LEVEL - 5)
+        levelMonitor.current(HIGH_LEVEL - 6)
+        levelMonitor.current(HIGH_LEVEL - 7)
 
         verify { tank.leak() }
     }

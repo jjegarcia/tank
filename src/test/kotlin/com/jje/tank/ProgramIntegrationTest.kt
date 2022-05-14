@@ -49,10 +49,12 @@ class ProgramIntegrationTest {
     @Test
     fun `giving flushing when digipot decreases then open inlet and close outlet valves`() {
 
-        val program = createProgram(listOf<Int>(
+        val program = createProgram(
+            listOf<Int>(
                 LOW_LEVEL + 5,
                 LOW_LEVEL - 1
-        ), TankState.FLUSHING)
+            ), TankState.FLUSHING
+        )
 
 
         program.start()
@@ -65,11 +67,14 @@ class ProgramIntegrationTest {
 
     @Test
     fun `giving Filling when digipot no raised then notify user,switch led on, close inlet valve`() {
-        val program = createProgram(listOf<Int>(
+        val program = createProgram(
+            listOf<Int>(
+                LOW_LEVEL + 5,
                 LOW_LEVEL + 5,
                 LOW_LEVEL + 5,
                 LOW_LEVEL + 5
-        ), TankState.FILLING)
+            ), TankState.FILLING
+        )
 
         program.start()
 
@@ -82,7 +87,11 @@ class ProgramIntegrationTest {
         val timerHandler: TimerHandler = mockk(relaxed = true)
         val tank = Tank(tankState, inletValve, outletValve, mockk(relaxed = true), led)
         val serialInterface: SerialInterface = mockk(relaxed = true)
-        every { serialInterface.readSerialBytes(1) } returnsMany digipotValues.map { digipotValue -> ByteArray(1, { digipotValue.toByte() }) }
+        every { serialInterface.readSerialBytes(1) } returnsMany digipotValues.map { digipotValue ->
+            ByteArray(
+                1,
+                { digipotValue.toByte() })
+        }
         val levelMonitor = TankLevelMonitor(tank, OverflowMonitor(3, DifferentialCalculator()))
         val process: Process = mockk(relaxed = true)
         val processCycles = digipotValues.map { true }.toMutableList()
